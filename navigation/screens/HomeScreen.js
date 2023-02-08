@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 
+import useGlobalStyles from "../../components/useGlobalStyles"
+
 export default function HomeScreen({ navigation }) {
+    
+    const globalStyles = useGlobalStyles();
+    
     return (
-        <View style={styles.container}>
-            <Text>Open up App.js to start working on your app!</Text>
-            <Button icon="share"
-                mode="contained"
-                buttonColor='green'
-                onPress={() => console.log('Pressed')}>
-                Press me
-            </Button>
+        <View style={[globalStyles.container, styles.container]}>
+            <Image source={require('../../media/image/minilogo.png')}
+                style={styles.cardImage} />
+            <Text style={[globalStyles.textStyle, styles.textStyle]}>Welcome to my App!</Text>
             <StatusBar style="auto" />
         </View>
     );
@@ -21,16 +22,12 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
+    textStyle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        margin: 20,
+    }
 });
-/*export default function HomeScreen({ navigation }) {
-    return (
-        <View>
-            <Text onPress={() => alert('This is the "Home" screen.')}
-                style={{ fontSize: 26, fontWeight: 'bold' }}>Home Screen</Text>
-        </View>
-    );
-}*/

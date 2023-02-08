@@ -1,24 +1,50 @@
-//import { View, Text } from 'react-native';
-
-import { NavigationContainer } from '@react-navigation/native';
+import { useColorScheme } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
 
 // Screens
 import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import BusinessCardScreen from './screens/BusinessCardScreen';
+import MyNotebookScreen from './screens/NotebookScreen';
+import AddNoteScreen from './screens/AddNoteScreen';
 
 // Screen names
 const homeName = 'Home';
 const detailsName = 'Details';
 const settingsName = 'Settings';
+const BusinessCardName = 'Business Card';
+const MyNotebookName = 'My Notebook';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+// const NotebookStack = createStackNavigator();
+
+function NotebookStackScreen() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name={MyNotebookName}
+                component={MyNotebookScreen}
+                options={{ title: 'My Notebook' }}
+            />
+            <Stack.Screen
+                name="AddNote"
+                component={AddNoteScreen}
+                options={{ title: 'Note' }}
+            />
+        </Stack.Navigator>
+    );
+}
 
 function MainContainer() {
+    const scheme = useColorScheme();
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Tab.Navigator initialRouteName={homeName}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
@@ -29,10 +55,13 @@ function MainContainer() {
                             iconName = focused ? 'home' : 'home-outline'
                         } else if (rn === detailsName) {
                             iconName = focused ? 'list' : 'list-outline'
+                        } else if (rn === BusinessCardName) {
+                            iconName = focused ? 'at-circle' : 'at-circle-outline'
+                        } else if (rn === MyNotebookName) {
+                            iconName = focused ? 'book' : 'book-outline'
                         } else if (rn === settingsName) {
                             iconName = focused ? 'settings' : 'settings-outline'
                         }
-
                         return <Ionicons name={iconName} size={size} color={color} />
                     },
                     tabBarItemStyle: {
@@ -41,13 +70,15 @@ function MainContainer() {
                     },
                 })}
                 tabBarOptions={{
-                    activeTintColor: 'tomato',
+                    activeTintColor: 'lime',
                     inactiveTintColor: 'grey',
                     labelStyle: { paddingBottom: 10, fontSize: 10 },
                 }}>
 
                 <Tab.Screen name={homeName} component={HomeScreen} />
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
+                <Tab.Screen name={BusinessCardName} component={BusinessCardScreen} />
+                <Tab.Screen name={MyNotebookName} component={NotebookStackScreen} options={{ headerShown: false }} />
                 <Tab.Screen name={settingsName} component={SettingsScreen} />
 
             </Tab.Navigator>

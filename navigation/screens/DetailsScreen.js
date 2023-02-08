@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+
 export default function DetailsScreen({ navigation }) {
     return (
         <View style={styles.container}>
