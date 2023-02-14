@@ -5,15 +5,15 @@ import useGlobalStyles from "../../components/useGlobalStyles"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const AddNoteScreen = ({ navigation, route }) => {
-    // const [title, setTitle] = useState('');
-    // const [note, setNote] = useState('');
+    /* const [title, setTitle] = useState('');
+    const [note, setNote] = useState(''); */
     const [title, setTitle] = useState(route.params?.note?.title || '');
     const [note, setNote] = useState(route.params?.note?.note || '');
     const globalStyles = useGlobalStyles();
 
     const addNote = route.params?.addNote || null;
     const editNote = route.params?.editNote || null;
-    const noteId = route.params?.note?.id;
+    const id = route.params?.note?.id;
     const counter = route.params?.counter;
 
     const handleSave = () => {
@@ -24,23 +24,25 @@ const AddNoteScreen = ({ navigation, route }) => {
                 addNote(title, note);
             }
         } else if (editNote) {
-            editNote(noteId, title, note);
+            editNote(id, title, note);
         }
         navigation.goBack();
     };
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button
+                    mode="contained"
+                    textColor='rgb(32, 138, 255)'
+                    buttonColor='transparent'
+                    onPress={handleSave}
+                    labelStyle={styles.headerRightBtn}
+                >{addNote ? "Add" : "Save"}</Button>
 
-    navigation.setOptions({
-        headerRight: () => (
-            <Button
-                mode="contained"
-                textColor='rgb(32, 138, 255)'
-                buttonColor='transparent'
-                onPress={handleSave}
-                labelStyle={styles.headerRightBtn}
-            >{addNote ? "Add" : "Save"}</Button>
-            
-        ),
+            ),
+        });
     });
+    // }, [navigation]);
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

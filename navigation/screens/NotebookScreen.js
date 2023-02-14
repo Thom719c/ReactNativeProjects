@@ -1,39 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import useGlobalStyles from "../../components/useGlobalStyles"
+import firebase from '../../components/firebaseDb';
+import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
 
 const NotebookScreen = ({ navigation }) => {
-    navigation.setOptions({
-        headerRight: () => (
-            <Button
-                mode="contained"
-                buttonColor='transparent'
-                icon="plus-circle"
-                onPress={() => navigation.navigate('AddNote', { counter: counter, addNote: addNote })}
-                labelStyle={styles.headerRightBtn}
-            ></Button>
-        ),
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button
+                    mode="contained"
+                    buttonColor='transparent'
+                    icon="plus-circle"
+                    onPress={() => navigation.navigate('AddNote', { counter: counter, addNote: addNote })}
+                    labelStyle={styles.headerRightBtn}
+                ></Button>
+            ),
+        });
     });
     const [counter, setCounter] = useState(0);
     const [notes, setNotes] = useState([]);
     const globalStyles = useGlobalStyles();
+    const db = getFirestore(firebase);
 
-    const addNote = (title, note) => {
-        setNotes([...notes, { id: counter + 1, title, note }]);
-        setCounter(counter + 1);
+    // This is for initialize data and only triggered once for every re-render
+    useEffect(() => {
+        initializeData();
+    }, []);
+
+    /**
+     * Read all notes from firestore
+     * and insert it into the notes (setNotes useSate)
+     */
+    async function initializeData() {
+        const notesCol = collection(db, 'notes');
+        const noteSnapshot = await getDocs(notesCol);
+        const noteList = noteSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        setNotes([...noteList]);
+    }
+
+    const addNote = async (title, note) => {
+        try {
+            const docRef = await addDoc(collection(db, "notes"), {
+                title: title,
+                note: note
+            });
+            setNotes([...notes, { id: docRef.id, title, note }]);
+            setCounter(counter + 1);
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
     };
 
-    const deleteNote = (id) => {
+    const deleteNote = async (id) => {
         setNotes(notes.filter(note => note.id !== id));
+        await deleteDoc(doc(db, "notes", id)); // Deletes note (document) on firestore
     };
 
-    const editNote = (id, title, note) => {
+    const editNote = async (id, title, note) => {
         let newNotes = [...notes];
         let index = newNotes.findIndex(n => n.id === id);
-        newNotes[index] = { id, title, note };
-        console.log(newNotes)
+        newNotes[index] = { title, note };
         setNotes(newNotes);
+        // Add a new document in collection "notes"
+        await setDoc(doc(db, "notes", id), {
+            title: title,
+            note: note
+        });
     };
 
     const renderNote = ({ item }) => (
