@@ -1,9 +1,7 @@
-import MainContainer from './navigation/MainContainer';
+import Login from './components/login';
 
 const App = () => {
-  return (
-    <MainContainer />
-  );
+  return <Login />
 }
 
 export default App

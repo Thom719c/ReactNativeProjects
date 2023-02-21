@@ -1,8 +1,9 @@
-import { useColorScheme } from 'react-native';
+import { useColorScheme, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Button } from 'react-native-paper';
 
 // Screens
 import HomeScreen from './screens/HomeScreen';
@@ -40,7 +41,7 @@ function NotebookStackScreen() {
     );
 }
 
-function MainContainer() {
+function MainContainer(props) {
     const scheme = useColorScheme();
 
     return (
@@ -68,6 +69,13 @@ function MainContainer() {
                         padding: 10,
                         height: 70
                     },
+                    headerRight: () => (
+                        <Button mode="contained"
+                            buttonColor='transparent'
+                            labelStyle={styles.headerRightBtn}
+                            onPress={() => props.logout()}>Log out
+                        </Button>
+                    )
                 })}
                 tabBarOptions={{
                     activeTintColor: 'lime',
@@ -85,5 +93,12 @@ function MainContainer() {
         </NavigationContainer>
     )
 }
+
+const styles = StyleSheet.create({
+    headerRightBtn: {
+        fontSize: 18,
+        fontWeight: '330',
+    }
+});
 
 export default MainContainer
