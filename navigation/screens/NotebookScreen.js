@@ -60,15 +60,24 @@ const NotebookScreen = ({ navigation }) => {
     };
 
     const editNote = async (id, title, note) => {
-        let newNotes = [...notes];
-        let index = newNotes.findIndex(n => n.id === id);
-        newNotes[index] = { title, note };
-        setNotes(newNotes);
-        // Add a new document in collection "notes"
-        await setDoc(doc(db, "notes", id), {
-            title: title,
-            note: note
-        });
+        try {
+            // Add a new document in collection "notes"
+            await setDoc(doc(db, "notes", id), {
+                title: title,
+                note: note
+            });
+            // Updating Note array
+            const newNotes = notes.map((notes) => {
+                if (id === notes.id) {
+                    return { ...notes, title: title, note: note };
+                } else {
+                    return notes;
+                }
+            });
+            setNotes(newNotes);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const renderNote = ({ item }) => (
@@ -95,12 +104,6 @@ const NotebookScreen = ({ navigation }) => {
                 renderItem={renderNote}
                 keyExtractor={(item, index) => index.toString()}
             />
-            {/* <Button
-                mode="contained"
-                buttonColor='#32CD32'
-                onPress={() => navigation.navigate('AddNote', { counter: counter, addNote: addNote })}
-                titleStyle={styles.buttonText}
-            >Add Note</Button> */}
         </View>
     );
 };
