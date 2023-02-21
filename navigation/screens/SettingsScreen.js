@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
 });*/
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
-import { Divider, Subheading, Switch as RNSwitch } from 'react-native-paper';
+import { Divider, Subheading, Switch as RNSwitch, Button } from 'react-native-paper';
 
-const SettingsScreen = ({ navigation }) => {
+const SettingsScreen = ({ navigation, logout }) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -48,6 +48,11 @@ const SettingsScreen = ({ navigation }) => {
                     onValueChange={() => setIsDarkMode(!isDarkMode)}
                 />
             </View>
+            <Button mode="contained"
+                buttonColor=''
+                labelStyle={styles.headerRightBtn}
+                onPress={() => logout()}>Log out
+            </Button>
         </View>
     );
 };

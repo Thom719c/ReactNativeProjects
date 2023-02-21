@@ -87,7 +87,7 @@ function MainContainer(props) {
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
                 <Tab.Screen name={BusinessCardName} component={BusinessCardScreen} />
                 <Tab.Screen name={MyNotebookName} component={NotebookStackScreen} options={{ headerShown: false }} />
-                <Tab.Screen name={settingsName} component={SettingsScreen} />
+                <Tab.Screen name={settingsName} component={() => <SettingsScreen logout={props.logout} />} />
 
             </Tab.Navigator>
         </NavigationContainer>
