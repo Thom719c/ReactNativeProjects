@@ -40,13 +40,14 @@ const NotebookScreen = ({ navigation }) => {
         setNotes([...noteList]);
     }
 
-    const addNote = async (title, note) => {
+    const addNote = async (title, note, images) => {
         try {
             const docRef = await addDoc(collection(db, "notes"), {
                 title: title,
-                note: note
+                note: note,
+                images: images
             });
-            setNotes([...notes, { id: docRef.id, title, note }]);
+            setNotes([...notes, { id: docRef.id, title, note, images }]);
             setCounter(counter + 1);
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
@@ -59,17 +60,18 @@ const NotebookScreen = ({ navigation }) => {
         await deleteDoc(doc(db, "notes", id)); // Deletes note (document) on firestore
     };
 
-    const editNote = async (id, title, note) => {
+    const editNote = async (id, title, note, images) => {
         try {
             // Add a new document in collection "notes"
             await setDoc(doc(db, "notes", id), {
                 title: title,
-                note: note
+                note: note,
+                images: images
             });
             // Updating Note array
             const newNotes = notes.map((notes) => {
                 if (id === notes.id) {
-                    return { ...notes, title: title, note: note };
+                    return { ...notes, title: title, note: note, images: images };
                 } else {
                     return notes;
                 }

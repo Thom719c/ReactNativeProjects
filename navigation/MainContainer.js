@@ -28,7 +28,7 @@ function NotebookStackScreen() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name={MyNotebookName}
+                name={'MyNotebookName'}
                 component={MyNotebookScreen}
                 options={{ title: 'My Notebook' }}
             />
@@ -72,8 +72,9 @@ function MainContainer(props) {
                     headerRight: () => (
                         <Button mode="contained"
                             buttonColor='transparent'
+                            icon="logout"
                             labelStyle={styles.headerRightBtn}
-                            onPress={() => props.logout()}>Log out
+                            onPress={() => props.logout()}>
                         </Button>
                     )
                 })}
@@ -96,7 +97,7 @@ function MainContainer(props) {
 
 const styles = StyleSheet.create({
     headerRightBtn: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: '330',
     }
 });
