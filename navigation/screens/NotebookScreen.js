@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import useGlobalStyles from "../../components/useGlobalStyles"
 import firebase from '../../components/firebaseDb';
 import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
+import FirebaseStorageImage from '../../components/FirebaseStorageImage'
 
 const NotebookScreen = ({ navigation }) => {
     React.useLayoutEffect(() => {
@@ -19,9 +20,12 @@ const NotebookScreen = ({ navigation }) => {
             ),
         });
     });
+
     const [counter, setCounter] = useState(0);
     const [notes, setNotes] = useState([]);
+
     const globalStyles = useGlobalStyles();
+
     const db = getFirestore(firebase);
 
     // This is for initialize data and only triggered once for every re-render
@@ -88,6 +92,7 @@ const NotebookScreen = ({ navigation }) => {
                 <View style={styles.noteContainer}>
                     <Text style={styles.noteTitle}>{item.title}</Text>
                     <Text style={styles.noteText} numberOfLines={3} ellipsizeMode="tail">{item.note}</Text>
+                    <FirebaseStorageImage item={item} />
                 </View>
                 <TouchableOpacity style={styles.noteContainer}>
                     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteNote(item.id)}>
