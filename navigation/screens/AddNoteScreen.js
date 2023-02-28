@@ -4,6 +4,7 @@ import { Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from '../../components/firebaseDb';
 import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject, uploadString, getMetadata } from "firebase/storage";
+import uuid from 'react-native-uuid';
 import useGlobalStyles from "../../components/useGlobalStyles"
 
 const AddNoteScreen = ({ navigation, route }) => {
@@ -65,19 +66,15 @@ const AddNoteScreen = ({ navigation, route }) => {
     const uploadImage = async (e) => {
         try {
             const file = e.uri;
-            let generatedNameFromFileUri = file.slice(-20);
-            const response = await fetch(file)
-            const blobFile = await response.blob()
+            let generatedNameWithUUID = uuid.v4();
+            const response = await fetch(file);
+            const blobFile = await response.blob();
 
-            if (generatedNameFromFileUri.includes("/")) {
-                generatedNameFromFileUri = generatedNameFromFileUri.replaceAll("/", "");
-            };
-
-            const reference = ref(storage, generatedNameFromFileUri)
-            const result = await uploadBytes(reference, blobFile)
-            setImages([...images, { uri: generatedNameFromFileUri }]);
+            const reference = ref(storage, generatedNameWithUUID);
+            const result = await uploadBytes(reference, blobFile);
+            setImages([...images, { uri: generatedNameWithUUID }]);
             // Downloades the recent upload again so show in note
-            const url = await getDownloadURL(result.ref)
+            const url = await getDownloadURL(result.ref);
             setUries([...uries, { uri: url }]);
         } catch (error) {
             console.log(error);
@@ -136,16 +133,14 @@ const AddNoteScreen = ({ navigation, route }) => {
     });
 
     const renderNote = ({ item }) => (
-        <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => navigation.navigate('AddNote', { note: item, editNote: editNote })}>
-            <View style={styles.imageContainer}>
-                {item !== null ? (
-                    <Image source={{ uri: item.uri }} style={styles.imageBox} />
-                ) : null}
-                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteImage(item)}>
-                    <Text style={styles.deleteButtonText}>Delete</Text>
-                </TouchableOpacity>
-            </View>
-        </TouchableOpacity>
+        <View style={styles.imageContainer}>
+            {item !== null ? (
+                <Image source={{ uri: item.uri }} style={styles.imageBox} />
+            ) : null}
+            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteImage(item)}>
+                <Text style={styles.deleteButtonText}>Delete</Text>
+            </TouchableOpacity>
+        </View>
     );
 
     return (

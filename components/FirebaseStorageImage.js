@@ -3,7 +3,6 @@ import { View, Image } from 'react-native';
 import firebase from './firebaseDb';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
-
 const FirebaseStorageImage = ({ item }) => {
     const storage = getStorage(firebase);
     const [image, setImage] = useState('');
