@@ -67,7 +67,7 @@ function MainContainer(props) {
                     },
                     tabBarItemStyle: {
                         padding: 10,
-                        height: 70
+                        // height: 70
                     },
                     headerRight: () => (
                         <Button mode="contained"
@@ -88,8 +88,9 @@ function MainContainer(props) {
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
                 <Tab.Screen name={BusinessCardName} component={BusinessCardScreen} />
                 <Tab.Screen name={MyNotebookName} component={NotebookStackScreen} options={{ headerShown: false }} />
-                <Tab.Screen name={settingsName} component={() => <SettingsScreen logout={props.logout} />} />
-
+                <Tab.Screen name={settingsName}>
+                    {() => <SettingsScreen logout={props.logout} />}
+                </Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
     )

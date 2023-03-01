@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, Image, FlatList, SafeAreaView, TouchableOpacity, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import firebase from '../../components/firebaseDb';
+import { storage } from '../../components/firebaseDb';
 import { getStorage, ref, getDownloadURL, uploadBytes, deleteObject, uploadString, getMetadata } from "firebase/storage";
 import uuid from 'react-native-uuid';
 import useGlobalStyles from "../../components/useGlobalStyles"
+import FirebaseStorageImages from '../../components/FirebaseStorageImages';
 
 const AddNoteScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState(route.params?.note?.title || '');
@@ -15,36 +16,16 @@ const AddNoteScreen = ({ navigation, route }) => {
     const [removeImage, setRemoveImage] = useState([]);
 
     const globalStyles = useGlobalStyles();
-    const storage = getStorage(firebase);
 
     const addNote = route.params?.addNote || null;
     const editNote = route.params?.editNote || null;
     const id = route.params?.note?.id;
     const counter = route.params?.counter;
 
-    useEffect(() => {
-        initializeData();
-    }, [])
-
     /* // To see the converted uries
     useEffect(() => {
         console.log('Updated uries:', uries);
     }, [uries]); */
-
-    async function initializeData() {
-        const imagesUri = [];
-        await images.map((images) => (convertRefName(images.uri, imagesUri)))
-    }
-
-    const convertRefName = async (image, imagesUri) => {
-        const reference = ref(storage, image);
-
-        await getDownloadURL(reference).then((x) => {
-            imagesUri.push({ uri: x, filename: image });
-            setUries([...imagesUri]);
-        });
-    };
-
 
     const handleChoosePhoto = async () => {
         let response = await ImagePicker.launchImageLibraryAsync({
@@ -132,17 +113,6 @@ const AddNoteScreen = ({ navigation, route }) => {
         });
     });
 
-    const renderNote = ({ item }) => (
-        <View style={styles.imageContainer}>
-            {item !== null ? (
-                <Image source={{ uri: item.uri }} style={styles.imageBox} />
-            ) : null}
-            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteImage(item)}>
-                <Text style={styles.deleteButtonText}>Delete</Text>
-            </TouchableOpacity>
-        </View>
-    );
-
     return (
         <TouchableWithoutFeedback>
             <View style={[styles.container, globalStyles.container]}>
@@ -176,12 +146,7 @@ const AddNoteScreen = ({ navigation, route }) => {
                     >Pick an image</Button>
                 </SafeAreaView>
 
-                <FlatList
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    data={uries}
-                    renderItem={renderNote}
-                    keyExtractor={(item, index) => index.toString()}
-                />
+                <FirebaseStorageImages item={images} amount={"all"} />
             </View>
         </TouchableWithoutFeedback>
     );

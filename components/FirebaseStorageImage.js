@@ -1,10 +1,10 @@
+/* OLD was for showing one image on the notelist → new component is FirebaseStorageImages.js */
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image } from 'react-native';
-import firebase from './firebaseDb';
+import { storage } from './firebaseDb';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 const FirebaseStorageImage = ({ item }) => {
-    const storage = getStorage(firebase);
     const [image, setImage] = useState('');
 
     useEffect(() => {
