@@ -12,7 +12,6 @@ const AddNoteScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState(route.params?.note?.title || '');
     const [note, setNote] = useState(route.params?.note?.note || '');
     const [images, setImages] = useState(route.params?.note?.images || []);
-    const [uries, setUries] = useState([]);
     const [removeImage, setRemoveImage] = useState([]);
 
     const globalStyles = useGlobalStyles();
@@ -52,11 +51,8 @@ const AddNoteScreen = ({ navigation, route }) => {
             const blobFile = await response.blob();
 
             const reference = ref(storage, generatedNameWithUUID);
-            const result = await uploadBytes(reference, blobFile);
+            await uploadBytes(reference, blobFile);
             setImages([...images, { uri: generatedNameWithUUID }]);
-            // Downloades the recent upload again so show in note
-            const url = await getDownloadURL(result.ref);
-            setUries([...uries, { uri: url }]);
         } catch (error) {
             console.log(error);
         }
@@ -65,10 +61,6 @@ const AddNoteScreen = ({ navigation, route }) => {
     const deleteImage = (e) => {
         setRemoveImage([...removeImage, { uri: e.uri, isRemove: true }]);
         setImages(images.filter(images => images.uri !== e.filename));
-        setUries((prevUries) => {
-            const updatedUries = prevUries.filter((uri) => uri.filename !== e.filename);
-            return updatedUries;
-        });
     }
 
     const isRemove = () => {
@@ -146,7 +138,7 @@ const AddNoteScreen = ({ navigation, route }) => {
                     >Pick an image</Button>
                 </SafeAreaView>
 
-                <FirebaseStorageImages item={images} amount={"all"} />
+                <FirebaseStorageImages item={images} amount={"all"} deleteImage={deleteImage} />
             </View>
         </TouchableWithoutFeedback>
     );

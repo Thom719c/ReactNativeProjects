@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, FlatList, TouchableOpacity, Text, TouchableWit
 import { storage } from './firebaseDb';
 import { ref, getDownloadURL } from "firebase/storage";
 
-const FirebaseStorageImages = ({ item, amount }) => {
+const FirebaseStorageImages = ({ item, amount, deleteImage }) => {
     const [image, setImage] = useState('');
     const [images, setImages] = useState([]);
 
@@ -21,7 +21,7 @@ const FirebaseStorageImages = ({ item, amount }) => {
             item.map(async (item) => {
                 const reference = ref(storage, item.uri);
                 const url = await getDownloadURL(reference);
-                setImages(prevImages => [...prevImages, { uri: url }]);
+                setImages(prevImages => [...prevImages, { uri: url, filename: item.uri }]);
             })
         }
     }
