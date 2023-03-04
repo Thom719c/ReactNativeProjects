@@ -1,23 +1,3 @@
-/*import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default function SettingsScreen({ navigation }) {
-    return (
-        <View style={styles.container}>
-            <Text onPress={() => navigation.navigation('Home')}
-                style={{ fontSize: 26, fontWeight: 'bold' }}>Settings Screen</Text>
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});*/
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { Divider, Subheading, Switch as RNSwitch, Button } from 'react-native-paper';
@@ -25,6 +5,7 @@ import { Divider, Subheading, Switch as RNSwitch, Button } from 'react-native-pa
 const SettingsScreen = ({ navigation, logout }) => {
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
+    // const logout = route.params?.logout;
 
     return (
         <View style={isDarkMode ? darkStyles.container : lightStyles.container}>
