@@ -26,6 +26,29 @@ const AddNoteScreen = ({ navigation, route }) => {
         console.log('Updated uries:', uries);
     }, [uries]); */
 
+    const getCameraPermission = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera permissions to make this work!');
+        } else {
+            takePhoto();
+        }
+    }
+
+    const takePhoto = async () => {
+        const { assets } = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            quality: 1,
+        });
+        if (!assets[0].uri) {
+            return;
+        }
+        // Do something with the photo URI here
+        const source = { uri: assets[0].uri };
+        uploadImage(source);
+    }
+
     const handleChoosePhoto = async () => {
         let response = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -129,13 +152,21 @@ const AddNoteScreen = ({ navigation, route }) => {
 
                 <View style={{ backgroundColor: '#ddd', height: 1, marginBottom: 10 }} />
 
-                <SafeAreaView>
+                <SafeAreaView style={styles.buttonRow}>
                     <Button
                         mode="contained"
                         buttonColor='#32CD32'
                         onPress={handleChoosePhoto}
                         titleStyle={styles.buttonText}
+                        style={styles.buttonStyle}
                     >Pick an image</Button>
+                    <Button
+                        mode="contained"
+                        buttonColor='#32CD32'
+                        onPress={getCameraPermission}
+                        titleStyle={styles.buttonText}
+                        style={styles.buttonStyle}
+                    >Take a photo</Button>
                 </SafeAreaView>
 
                 <FirebaseStorageImages item={images} amount={"all"} deleteImage={deleteImage} />
@@ -175,11 +206,18 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         minHeight: 150
     },
+    buttonRow: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between'
+    },
     buttonText: {
         borderRadius: 5,
         padding: 10,
         elevation: 5,
         fontSize: 20,
+    },
+    buttonStyle: {
+        width: 150
     },
     headerRightBtn: {
         fontSize: 18,
