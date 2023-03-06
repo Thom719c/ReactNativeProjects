@@ -46,7 +46,7 @@ const MenuStackScreen = ({ logout }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name={'Menu'}
+                name={'MenuStack'}
                 component={MenuScreen}
                 options={{ headerShown: false }}
             />
@@ -95,13 +95,11 @@ function MainContainer(props) {
                             labelStyle={styles.headerRightBtn}
                             onPress={() => props.logout()}>
                         </Button>
-                    )
-                })}
-                tabBarOptions={{
-                    activeTintColor: 'lime',
-                    inactiveTintColor: 'grey',
-                    labelStyle: { paddingBottom: 10, fontSize: 10 },
-                }}>
+                    ),
+                    tabBarActiveTintColor: "lime",
+                    tabBarInactiveTintColor: "grey",
+                    tabBarLabelStyle: { paddingBottom: 10, fontSize: 10 },
+                })}>
 
                 <Tab.Screen name={homeName} component={HomeScreen} />
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
@@ -123,7 +121,7 @@ function MainContainer(props) {
 const styles = StyleSheet.create({
     headerRightBtn: {
         fontSize: 22,
-        fontWeight: '330',
+        fontWeight: 'normal',
     }
 });
 

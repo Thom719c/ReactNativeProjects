@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, Switch, StyleSheet, TouchableOpacity } from 'react-native';
 import { Divider, Subheading, Switch as RNSwitch, Button } from 'react-native-paper';
 
