@@ -13,6 +13,7 @@ import BusinessCardScreen from './screens/BusinessCardScreen';
 import MyNotebookScreen from './screens/NotebookScreen';
 import AddNoteScreen from './screens/AddNoteScreen';
 import MenuScreen from './screens/MenuScreen';
+import MapsScreen from './screens/MapsScreen';
 
 // Screen names
 const homeName = 'Home';
@@ -21,6 +22,7 @@ const settingsName = 'Settings';
 const menuName = 'Menu';
 const BusinessCardName = 'Business Card';
 const MyNotebookName = 'My Notebook';
+const MapsName = 'Maps';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -81,6 +83,8 @@ function MainContainer(props) {
                             iconName = focused ? 'settings' : 'settings-outline'
                         } else if (rn === menuName) {
                             iconName = focused ? 'menu' : 'menu-outline'
+                        } else if (rn === MapsName) {
+                            iconName = focused ? 'map' : 'map-outline'
                         }
                         return <Ionicons name={iconName} size={size} color={color} />
                     },
@@ -105,6 +109,7 @@ function MainContainer(props) {
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
                 <Tab.Screen name={BusinessCardName} component={BusinessCardScreen} />
                 <Tab.Screen name={MyNotebookName} component={NotebookStackScreen} options={{ headerShown: false }} />
+                <Tab.Screen name={MapsName} component={MapsScreen} />
                 <Tab.Screen name={menuName}>
                     {() => <MenuStackScreen logout={props.logout} />}
                 </Tab.Screen>
