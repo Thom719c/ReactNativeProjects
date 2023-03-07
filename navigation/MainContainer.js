@@ -90,7 +90,7 @@ function MainContainer(props) {
                     },
                     tabBarItemStyle: {
                         padding: 10,
-                        // height: 70
+                        height: Platform.OS !== 'web' ? 70 : null
                     },
                     headerRight: () => (
                         <Button mode="contained"
