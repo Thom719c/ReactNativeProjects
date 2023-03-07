@@ -13,7 +13,7 @@ import BusinessCardScreen from './screens/BusinessCardScreen';
 import MyNotebookScreen from './screens/NotebookScreen';
 import AddNoteScreen from './screens/AddNoteScreen';
 import MenuScreen from './screens/MenuScreen';
-import MapsScreen from './screens/MapsScreen';
+import MapsScreen from './screens/MapsScreenV2';
 
 // Screen names
 const homeName = 'Home';

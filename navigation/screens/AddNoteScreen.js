@@ -108,7 +108,7 @@ const AddNoteScreen = ({ navigation, route }) => {
             }
         } else if (editNote) {
             isRemove();
-            editNote(id, title, note, images);
+            editNote(id, title, note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
         }
         navigation.goBack();
     };

@@ -24,7 +24,7 @@ const MapsScreen = () => {
       let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=geocodejson&lat=${location.coords.latitude}&lon=${location.coords.longitude}`)
         .then(response => response.json())
         .then(result => {
-          console.log(result.features[0].properties.geocoding.label)
+          console.log(result.features[0].properties.geocoding)
           setAddress({
             city: result.features[0].properties.geocoding.city,
             postcode: result.features[0].properties.geocoding.postcode,
@@ -45,7 +45,7 @@ const MapsScreen = () => {
   if (errorMsg) {
     text = errorMsg;
   } else if (location && address) {
-    text = `${address?.street ? address?.street : address?.name} ${address?.housenumber},\n${address?.city ? address?.city : address?.label.split(",")[3]}, ${address?.postcode}`;
+    text = `${address?.street ? address?.street : address?.name} ${address?.housenumber ? address?.housenumber : ""},\n${address?.city ? address?.city : address?.label.split(",")[3]}, ${address?.postcode}`;
   }
 
   return (
