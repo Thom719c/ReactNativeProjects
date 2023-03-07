@@ -4,11 +4,13 @@ const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync(env, argv);
 
+  
   // Add the following lines to include a custom source map configuration
   config.devtool = 'source-map'; 
-
+  
   // If you want to add a new alias to the config.
   config.resolve.alias['moduleA'] = 'moduleB';
+  // config.resolve.alias['react-native-maps'] = '@teovilla/react-native-web-maps';
 
   // Maybe you want to turn off compression in dev mode.
   if (config.mode === 'development') {

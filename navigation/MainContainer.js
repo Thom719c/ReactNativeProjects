@@ -1,4 +1,4 @@
-import { useColorScheme, StyleSheet } from 'react-native';
+import { useColorScheme, StyleSheet, Platform } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
