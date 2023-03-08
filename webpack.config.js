@@ -12,7 +12,7 @@ module.exports = async function (env, argv) {
   // config.resolve.alias['moduleA'] = 'moduleB';
   config.resolve.alias = {
     ...config.resolve.alias,
-    './screens/MapsScreen': './screens/WebMapsScreen.js',
+    './screens/MapsScreenV2': './screens/WebMapsScreen.js',
   };
 
   /* config.resolve.alias = {
