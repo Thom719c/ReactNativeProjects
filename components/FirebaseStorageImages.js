@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     smallImageBox: {
         width: 100,
         height: 100,
-        marginTop: 10
+        marginTop: 10,
+        borderRadius: 10
     },
     imageContainer: {
         marginTop: 30,

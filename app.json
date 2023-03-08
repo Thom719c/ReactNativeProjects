@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.example.ProjectName",
+      "bundleIdentifier": "com.example.ReactNativeProject",
       "config": {
       "googleMapsApiKey": "AIzaSyBea8_Hh-7Oo3Oa4WDg-6fYqW1VhgnWzOo"
       }

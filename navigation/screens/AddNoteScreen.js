@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
+import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, SafeAreaView, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../../components/firebaseDb';
@@ -11,6 +11,7 @@ import FirebaseStorageImages from '../../components/FirebaseStorageImages';
 const AddNoteScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState(route.params?.note?.title || '');
     const [note, setNote] = useState(route.params?.note?.note || '');
+    // const [marker, setMarker] = useState(route.params?.note?.marker || {});
     const [images, setImages] = useState(route.params?.note?.images || []);
     const [removeImage, setRemoveImage] = useState([]);
 
@@ -102,9 +103,9 @@ const AddNoteScreen = ({ navigation, route }) => {
     const handleSave = () => {
         if (addNote) {
             if (title === "") {
-                addNote("Note " + (counter + 1), note, images);
+                addNote("Note " + (counter + 1), note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
             } else {
-                addNote(title, note, images);
+                addNote(title, note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
             }
         } else if (editNote) {
             isRemove();
@@ -112,6 +113,12 @@ const AddNoteScreen = ({ navigation, route }) => {
         }
         navigation.goBack();
     };
+
+    const mapView = "Maps"
+    const goToMap = () => {
+        navigation.navigate(mapView, { note: route.params.marker, amount: 1 })
+        // navigation.navigate(mapView, { note: route.params.marker, amount: 1, updateState: (newMarker) => setMarker(newMarker) })
+    }
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -159,14 +166,35 @@ const AddNoteScreen = ({ navigation, route }) => {
                         onPress={handleChoosePhoto}
                         titleStyle={styles.buttonText}
                         style={styles.buttonStyle}
-                    >Pick an image</Button>
+                    >
+                        <View>
+                            <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
+                                Pick an
+                                image
+                            </Text>
+                        </View>
+                    </Button>
+                    <Button
+                        mode="contained"
+                        buttonColor='#32CD32'
+                        titleStyle={styles.buttonText}
+                        style={styles.buttonStyle}
+                        onPress={goToMap}
+                    >Location</Button>
                     <Button
                         mode="contained"
                         buttonColor='#32CD32'
                         onPress={getCameraPermission}
                         titleStyle={styles.buttonText}
                         style={styles.buttonStyle}
-                    >Take a photo</Button>
+                    >
+                        <View>
+                            <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
+                                Take a
+                                photo
+                            </Text>
+                        </View>
+                    </Button>
                 </SafeAreaView>
 
                 <FirebaseStorageImages item={images} amount={"all"} deleteImage={deleteImage} />
@@ -207,8 +235,8 @@ const styles = StyleSheet.create({
         minHeight: 150
     },
     buttonRow: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     buttonText: {
         borderRadius: 5,
@@ -217,11 +245,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     buttonStyle: {
-        width: 150
+        width: 110,
+        height: 55,
+        justifyContent: 'center'
     },
     headerRightBtn: {
         fontSize: 18,
-        fontWeight: '330',
+        fontWeight: 'normal',
     },
     image: {
         width: '100%',

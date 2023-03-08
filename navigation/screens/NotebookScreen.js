@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react
 import { Button } from 'react-native-paper';
 import useGlobalStyles from "../../components/useGlobalStyles"
 import { db } from '../../components/firebaseDb';
-import { getFirestore, collection, getDocs, getDoc, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
+import { collection, getDocs, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
 import FirebaseStorageImages from '../../components/FirebaseStorageImages'
 
 const NotebookScreen = ({ navigation }) => {
@@ -15,6 +15,15 @@ const NotebookScreen = ({ navigation }) => {
                     buttonColor='transparent'
                     icon="plus-circle"
                     onPress={() => navigation.navigate('AddNote', { counter: counter, addNote: addNote })}
+                    labelStyle={styles.headerRightBtn}
+                ></Button>
+            ),
+            headerLeft: () => (
+                <Button
+                    mode="contained"
+                    buttonColor='transparent'
+                    icon="map"
+                    onPress={clickMap}
                     labelStyle={styles.headerRightBtn}
                 ></Button>
             ),
@@ -42,14 +51,18 @@ const NotebookScreen = ({ navigation }) => {
         setNotes([...noteList]);
     }
 
-    const addNote = async (title, note, images) => {
+    const addNote = async (title, note, images, marker) => {
+        if (marker.latitude === undefined) {
+            marker = {}
+        }
         try {
             const docRef = await addDoc(collection(db, "notes"), {
                 title: title,
                 note: note,
-                images: images
+                images: images,
+                marker: marker
             });
-            setNotes([...notes, { id: docRef.id, title, note, images }]);
+            setNotes([...notes, { id: docRef.id, title, note, images, marker }]);
             setCounter(counter + 1);
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
@@ -62,18 +75,22 @@ const NotebookScreen = ({ navigation }) => {
         await deleteDoc(doc(db, "notes", id)); // Deletes note (document) on firestore
     };
 
-    const editNote = async (id, title, note, images) => {
+    const editNote = async (id, title, note, images, marker) => {
+        if (marker.latitude === undefined) {
+            marker = {}
+        }
         try {
             // Add a new document in collection "notes"
             await setDoc(doc(db, "notes", id), {
                 title: title,
                 note: note,
-                images: images
+                images: images,
+                marker: marker
             });
             // Updating Note array
             const newNotes = notes.map((notes) => {
                 if (id === notes.id) {
-                    return { ...notes, title: title, note: note, images: images };
+                    return { ...notes, title: title, note: note, images: images, marker: marker };
                 } else {
                     return notes;
                 }
@@ -83,6 +100,11 @@ const NotebookScreen = ({ navigation }) => {
             console.error(error);
         }
     };
+
+    const mapView = "Maps"
+    const clickMap = (item) => {
+        navigation.navigate(mapView, { notes: notes, amount: "all" })
+    }
 
     const renderNote = ({ item }) => (
         <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => navigation.navigate('AddNote', { note: item, editNote: editNote })}>

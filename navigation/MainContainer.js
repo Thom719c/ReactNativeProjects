@@ -41,6 +41,11 @@ function NotebookStackScreen() {
                 component={AddNoteScreen}
                 options={{ title: 'Note' }}
             />
+            <Stack.Screen
+                name="Maps"
+                component={MapsScreen}
+                options={{ title: 'Map' }}
+            />
         </Stack.Navigator>
     );
 }
@@ -109,7 +114,7 @@ function MainContainer(props) {
                 <Tab.Screen name={detailsName} component={DetailsScreen} />
                 <Tab.Screen name={BusinessCardName} component={BusinessCardScreen} />
                 <Tab.Screen name={MyNotebookName} component={NotebookStackScreen} options={{ headerShown: false }} />
-                <Tab.Screen name={MapsName} component={MapsScreen} />
+                {/* <Tab.Screen name={MapsName} component={MapsScreen} /> */}
                 <Tab.Screen name={menuName}>
                     {() => <MenuStackScreen logout={props.logout} />}
                 </Tab.Screen>
