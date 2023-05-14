@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, SafeAreaView, Text } from 'react-native';
+import { Platform, View, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, SafeAreaView, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../../components/firebaseDb';
@@ -103,13 +103,13 @@ const AddNoteScreen = ({ navigation, route }) => {
     const handleSave = () => {
         if (addNote) {
             if (title === "") {
-                addNote("Note " + (counter + 1), note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
+                addNote("Note " + (counter + 1), note, images, { latitude: route.params.latitude, longitude: route.params.longitude });
             } else {
-                addNote(title, note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
+                addNote(title, note, images, { latitude: route.params.latitude, longitude: route.params.longitude });
             }
         } else if (editNote) {
             isRemove();
-            editNote(id, title, note, images, {latitude: route.params.latitude, longitude: route.params.longitude});
+            editNote(id, title, note, images, { latitude: route.params.latitude, longitude: route.params.longitude });
         }
         navigation.goBack();
     };
@@ -136,70 +136,72 @@ const AddNoteScreen = ({ navigation, route }) => {
     });
 
     return (
-        <TouchableWithoutFeedback>
-            <View style={[styles.container, globalStyles.container]}>
-                <TextInput
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder="Title"
-                    placeholderTextColor="#999"
-                    style={styles.titleInput}
-                    onBlur={Keyboard.dismiss}
-                />
-                <View style={{ backgroundColor: '#ddd', height: 1, marginBottom: 10 }} />
-                <TextInput
-                    value={note}
-                    onChangeText={setNote}
-                    placeholder="Note"
-                    placeholderTextColor="#999"
-                    multiline={true}
-                    style={styles.noteInput}
-                    onBlur={Keyboard.dismiss}
-                />
+        <ScrollView>
+            <TouchableWithoutFeedback>
+                <View style={[styles.container, globalStyles.container]}>
+                    <TextInput
+                        value={title}
+                        onChangeText={setTitle}
+                        placeholder="Title"
+                        placeholderTextColor="#999"
+                        style={styles.titleInput}
+                        onBlur={Keyboard.dismiss}
+                    />
+                    <View style={{ backgroundColor: '#ddd', height: 1, marginBottom: 10 }} />
+                    <TextInput
+                        value={note}
+                        onChangeText={setNote}
+                        placeholder="Note"
+                        placeholderTextColor="#999"
+                        multiline={true}
+                        style={styles.noteInput}
+                        onBlur={Keyboard.dismiss}
+                    />
 
-                <View style={{ backgroundColor: '#ddd', height: 1, marginBottom: 10 }} />
+                    <View style={{ backgroundColor: '#ddd', height: 1, marginBottom: 10 }} />
 
-                <SafeAreaView style={styles.buttonRow}>
-                    <Button
-                        mode="contained"
-                        buttonColor='#32CD32'
-                        onPress={handleChoosePhoto}
-                        titleStyle={styles.buttonText}
-                        style={styles.buttonStyle}
-                    >
-                        <View>
-                            <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
-                                Pick an
-                                image
-                            </Text>
-                        </View>
-                    </Button>
-                    <Button
-                        mode="contained"
-                        buttonColor='#32CD32'
-                        titleStyle={styles.buttonText}
-                        style={styles.buttonStyle}
-                        onPress={goToMap}
-                    >Location</Button>
-                    <Button
-                        mode="contained"
-                        buttonColor='#32CD32'
-                        onPress={getCameraPermission}
-                        titleStyle={styles.buttonText}
-                        style={styles.buttonStyle}
-                    >
-                        <View>
-                            <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
-                                Take a
-                                photo
-                            </Text>
-                        </View>
-                    </Button>
-                </SafeAreaView>
+                    <SafeAreaView style={styles.buttonRow}>
+                        <Button
+                            mode="contained"
+                            buttonColor='#32CD32'
+                            onPress={handleChoosePhoto}
+                            titleStyle={styles.buttonText}
+                            style={styles.buttonStyle}
+                        >
+                            <View>
+                                <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
+                                    Pick an
+                                    image
+                                </Text>
+                            </View>
+                        </Button>
+                        <Button
+                            mode="contained"
+                            buttonColor='#32CD32'
+                            titleStyle={styles.buttonText}
+                            style={styles.buttonStyle}
+                            onPress={goToMap}
+                        >Location</Button>
+                        <Button
+                            mode="contained"
+                            buttonColor='#32CD32'
+                            onPress={getCameraPermission}
+                            titleStyle={styles.buttonText}
+                            style={styles.buttonStyle}
+                        >
+                            <View>
+                                <Text numberOfLines={2} style={{ textAlign: 'center', color: "white" }}>
+                                    Take a
+                                    photo
+                                </Text>
+                            </View>
+                        </Button>
+                    </SafeAreaView>
 
-                <FirebaseStorageImages item={images} amount={"all"} deleteImage={deleteImage} />
-            </View>
-        </TouchableWithoutFeedback>
+                    <FirebaseStorageImages item={images} amount={"all"} deleteImage={deleteImage} />
+                </View>
+            </TouchableWithoutFeedback>
+        </ScrollView>
     );
 };
 
